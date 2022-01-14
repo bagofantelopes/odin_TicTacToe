@@ -1,0 +1,30 @@
+body {
+    background-color: darkslateblue;
+}
+
+.board_row {
+    display: flex;
+    flex-direction: column;
+}
+
+.board_square {
+    padding: 50px;
+    border: 2.5px solid white;
+}
+
+.player_move_x {
+    width: fit-content;
+    height: fit-content;
+}
+
+.player_move_o {
+
+}
+
+
+#game_board {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10%;
+}
