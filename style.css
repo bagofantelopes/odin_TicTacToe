@@ -4,17 +4,16 @@ body {
 
 .board_row {
     display: flex;
-    flex-direction: column;
 }
 
 .board_square {
-    padding: 50px;
+    padding: 100px;
     border: 2.5px solid white;
+    color: white;
 }
 
 .player_move_x {
-    width: fit-content;
-    height: fit-content;
+    
 }
 
 .player_move_o {
@@ -24,6 +23,7 @@ body {
 
 #game_board {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     margin-top: 10%;

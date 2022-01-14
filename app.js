@@ -1,30 +1,44 @@
-const Gameboard = (() => {
-    let turnCounter = 0;
-    let board = document.querySelectorAll('.board_square');
-    let board2 = [];
-    board2.length = 9;
-    board2.fill('test', 0, 8);
+// module which generates the gameboard
+const gameBoard = (() => {
 
+    let board = [];
+    board.length = 9;
+    board.fill('test', 0, 9);
+    console.log(board);
 
-    board.forEach((square, index) => {
-        square.addEventListener('click', (e) => {
-            let p = document.createElement('p')
-            if (turnCounter == 0) {
-                p.innerText = 'x';
-                p.setAttribute('class', 'player_move_x');
-                turnCounter = 1;
-            } else if (turnCounter == 1) {
-                p.innerText = 'o';
-                p.setAttribute('class', 'player_move_o');
-                turnCounter = 0;
-            }
-            square.appendChild(p);
-        })
-    })
     const makeBoard = () => {
-        console.log(board2);
+        squareCounter = 0;
+        rowCounter = 0;
+        let main_board = document.createElement('div');
+        main_board.setAttribute('id', 'game_board');    
+        let row = document.createElement('div');
+        row.setAttribute('data-index', rowCounter);
+        row.setAttribute('class', 'board_row');
+
+        board.forEach((square, index) => {
+            // create individual squares and add them to a row
+            game_square = document.createElement('div')
+            game_square.setAttribute('class', 'board_square');
+            game_square.setAttribute('data-index', index);
+            game_square.innerText = square;
+            row.appendChild(game_square);
+            squareCounter++;
+
+            // add rows to the main game board
+            if (squareCounter == 3) {
+                main_board.appendChild(row);
+                rowCounter++;
+                row = document.createElement('div');
+                row.setAttribute('class', 'board_row');
+                row.setAttribute('data-index', rowCounter);
+                squareCounter = 0;
+            }
+        });
+        // add the main game board to the DOM
+        document.querySelector('#main').appendChild(main_board);
     }
-    return { makeBoard };
+
+    return { board, makeBoard };
 })();
 
 const Player = (name, symbol) => {
@@ -35,16 +49,15 @@ const Player = (name, symbol) => {
         console.log(`${getName()}, ${getSymbol()}`)
     };
 
-    return {getPlayerInfo};
+    return {getName, getSymbol, getPlayerInfo};
 };
 
-const Gameplay = (player1, player2) => {
-
+const Gameplay = (array, player1, player2) => {
+    
 };  
 
 let jimmy = Player('jimmy', 'x');
 let bobby = Player('bobby', 'o');
 jimmy.getPlayerInfo();
-
-
-Gameboard.makeBoard();
+gameBoard.makeBoard();
+console.log(gameBoard.board);
