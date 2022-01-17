@@ -4,12 +4,20 @@ body {
 
 .board_row {
     display: flex;
+    padding: 10px;
+    border: 1px solid white;
+    min-height: 100%;
 }
 
 .board_square {
     padding: 100px;
+    text-align: center;
+    justify-self: center;
+    align-self: center;
     border: 2.5px solid white;
     color: white;
+    min-height: 50px;
+    min-width: 50px;
 }
 
 .player_move_x {
@@ -27,4 +35,5 @@ body {
     justify-content: center;
     align-items: center;
     margin-top: 10%;
+    border: 5px groove black;
 }

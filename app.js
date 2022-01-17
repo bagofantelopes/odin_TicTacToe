@@ -3,8 +3,7 @@ const gameBoard = (() => {
 
     let board = [];
     board.length = 9;
-    board.fill('test', 0, 9);
-    console.log(board);
+    board.fill('', 0, 9);
 
     const makeBoard = () => {
         squareCounter = 0;
@@ -17,7 +16,7 @@ const gameBoard = (() => {
 
         board.forEach((square, index) => {
             // create individual squares and add them to a row
-            game_square = document.createElement('div')
+            game_square = document.createElement('div');
             game_square.setAttribute('class', 'board_square');
             game_square.setAttribute('data-index', index);
             game_square.innerText = square;
@@ -32,13 +31,44 @@ const gameBoard = (() => {
                 row.setAttribute('class', 'board_row');
                 row.setAttribute('data-index', rowCounter);
                 squareCounter = 0;
-            }
+            };
         });
         // add the main game board to the DOM
         document.querySelector('#main').appendChild(main_board);
-    }
+    };
 
     return { board, makeBoard };
+})();
+
+// module to add functionality to the display (let the game "be played")
+// also gathers the moves!
+const displayController = (() => {
+    player_turn = true;
+    let moves = [];
+    moves.length = 9;
+
+    const playerMoves = () => {
+        let nodelist = document.querySelectorAll('#main #game_board .board_row .board_square')
+        //console.log(nodelist);
+        nodelist.forEach((square) => {
+            square.addEventListener('click', e => {
+                if (player_turn) {
+                    let i = e.currentTarget.getAttribute('data-index');
+                    moves[i] = 'X';
+                    e.currentTarget.innerText = 'X';
+                    player_turn = false;
+                } else if (!player_turn) {
+                    let i = e.currentTarget.getAttribute('data-index');
+                    moves[i] = 'O';
+                    e.currentTarget.innerText = 'O';
+                    player_turn = true;
+                }
+
+            });
+        });
+    };
+
+    return { playerMoves, moves }
 })();
 
 const Player = (name, symbol) => {
@@ -52,12 +82,15 @@ const Player = (name, symbol) => {
     return {getName, getSymbol, getPlayerInfo};
 };
 
-const Gameplay = (array, player1, player2) => {
-    
-};  
 
-let jimmy = Player('jimmy', 'x');
-let bobby = Player('bobby', 'o');
-jimmy.getPlayerInfo();
+
+let player1 = Player('jimmy', 'x');
+let player2 = Player('bobby', 'o');
+player1.getPlayerInfo();
 gameBoard.makeBoard();
-console.log(gameBoard.board);
+displayController.playerMoves();
+
+let test_button = document.getElementById('test_button');
+test_button.addEventListener('click', e => {
+    console.log(displayController.moves);
+})
