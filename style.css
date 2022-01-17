@@ -2,6 +2,21 @@ body {
     background-color: darkslateblue;
 }
 
+label, input {
+    background-color: aliceblue;
+    font-size: 1.2rem;
+    margin: 5px 5px;
+}
+
+button {
+    padding: 10px;
+    margin: 10px auto;
+}
+
+button:hover {
+    background-color: royalblue;
+}
+
 .board_row {
     display: flex;
     padding: 10px;
@@ -12,22 +27,12 @@ body {
 .board_square {
     padding: 100px;
     text-align: center;
-    justify-self: center;
-    align-self: center;
+    font-size: 2rem;
     border: 2.5px solid white;
     color: white;
     min-height: 50px;
     min-width: 50px;
 }
-
-.player_move_x {
-    
-}
-
-.player_move_o {
-
-}
-
 
 #game_board {
     display: flex;
@@ -36,4 +41,21 @@ body {
     align-items: center;
     margin-top: 10%;
     border: 5px groove black;
+}
+
+#game_setup {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 5px groove white;
+    background-color: darkslategray;
+}
+
+#player_name_select {
+
+}
+
+#player_move_select {
+
 }

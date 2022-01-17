@@ -35,6 +35,7 @@ const gameBoard = (() => {
         });
         // add the main game board to the DOM
         document.querySelector('#main').appendChild(main_board);
+        document.getElementById('main').style.display = 'none';
     };
 
     return { board, makeBoard };
@@ -43,54 +44,103 @@ const gameBoard = (() => {
 // module to add functionality to the display (let the game "be played")
 // also gathers the moves!
 const displayController = (() => {
-    player_turn = true;
-    let moves = [];
-    moves.length = 9;
 
-    const playerMoves = () => {
+    // lets player1 select whether they want to be 'X' or 'O'
+    // player2 will be whichever one player1 did not choose
+    const playerSetup = (playerObj1, playerObj2) => {
+        x = document.getElementById('x_button');
+        x.addEventListener('click', e => {
+            if(!playerObj1.getSymbol()) {
+                playerObj1.setSymbol('X');
+                playerObj2.setSymbol('O');
+                document.getElementById('player_move_select').style.display = 'none';
+                document.getElementById('main').style.display = 'block';
+            };
+        });
+
+        o = document.getElementById('o_button');
+        o.addEventListener('click', e => {
+            if(!playerObj1.getSymbol()) {
+                playerObj1.setSymbol('O');
+                playerObj2.setSymbol('X');
+                document.getElementById('player_select').style.display = 'none';
+                document.getElementById('main').style.display = 'block';
+            };
+        });
+
+        document.getElementById('name_submit').addEventListener('click', e => {
+            player1Name = document.getElementById('player_1_name');
+            playerObj1.setName(player1Name.innerText);
+    
+            console.log(playerObj1.getName());
+    
+            player2Name = document.getElementById('player_2_name');
+            playerObj2.setName = player2Name.innerText;    
+        });
+
+
+    };
+
+    // a simple bool to occilate between the player turns
+    // is there maybe a better way to handle this?
+    // Fine for now
+    player1_turn = true;
+    
+
+    // event handlers and logic for players clicking on the gameboard
+    // will not let a player add their move to a tile if the tile is occupied
+    // appends the move to the "moves" array as well
+    const playerMoves = (playerObj1, playerObj2, moves) => {
         let nodelist = document.querySelectorAll('#main #game_board .board_row .board_square')
         //console.log(nodelist);
         nodelist.forEach((square) => {
             square.addEventListener('click', e => {
-                if (player_turn) {
+                if (player1_turn) {
                     let i = e.currentTarget.getAttribute('data-index');
-                    moves[i] = 'X';
-                    e.currentTarget.innerText = 'X';
-                    player_turn = false;
-                } else if (!player_turn) {
+                    moves[i] = playerObj1.getSymbol();
+                    if (e.currentTarget.innerText == '') {
+                        e.currentTarget.innerText = playerObj1.getSymbol();
+                        player1_turn = false;    
+                    }
+                } else if (!player1_turn) {
                     let i = e.currentTarget.getAttribute('data-index');
-                    moves[i] = 'O';
-                    e.currentTarget.innerText = 'O';
-                    player_turn = true;
+                    moves[i] = playerObj2.getSymbol();
+                    if (e.currentTarget.innerText == '') {
+                        e.currentTarget.innerText = playerObj2.getSymbol();
+                        player1_turn = true;    
+                    }
                 }
 
             });
         });
     };
 
-    return { playerMoves, moves }
+    return { playerSetup, playerMoves }
 })();
 
-const Player = (name, symbol) => {
+const Player = () => {
+    let symbol = '';
+    let name = '';
+
     const getName = () => name;
+    const setName = (str) => name = str;
+
+    const setSymbol = (str) => symbol = str;
     const getSymbol = () => symbol;
 
-    const getPlayerInfo = () => {
-        console.log(`${getName()}, ${getSymbol()}`)
-    };
-
-    return {getName, getSymbol, getPlayerInfo};
+    return {getName, setName, getSymbol, setSymbol};
 };
 
 
 
-let player1 = Player('jimmy', 'x');
-let player2 = Player('bobby', 'o');
-player1.getPlayerInfo();
+let player1 = Player();
+let player2 = Player();
+
 gameBoard.makeBoard();
-displayController.playerMoves();
+displayController.playerSetup(player1, player2);
+displayController.playerMoves(player1, player2, gameBoard.board);
 
 let test_button = document.getElementById('test_button');
 test_button.addEventListener('click', e => {
-    console.log(displayController.moves);
+    console.log(gameBoard.board);
 })
