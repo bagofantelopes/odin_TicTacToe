@@ -53,7 +53,7 @@ const displayController = (() => {
             if(!playerObj1.getSymbol()) {
                 playerObj1.setSymbol('X');
                 playerObj2.setSymbol('O');
-                document.getElementById('player_move_select').style.display = 'none';
+                document.getElementById('player_move_select_panel').style.display = 'none';
                 document.getElementById('main').style.display = 'block';
             };
         });
@@ -63,7 +63,7 @@ const displayController = (() => {
             if(!playerObj1.getSymbol()) {
                 playerObj1.setSymbol('O');
                 playerObj2.setSymbol('X');
-                document.getElementById('player_select').style.display = 'none';
+                document.getElementById('player_move_select_panel').style.display = 'none';
                 document.getElementById('main').style.display = 'block';
             };
         });
@@ -78,7 +78,6 @@ const displayController = (() => {
             playerObj2.setName = player2Name.innerText;    
         });
 
-
     };
 
     // a simple bool to occilate between the player turns
@@ -86,7 +85,6 @@ const displayController = (() => {
     // Fine for now
     player1_turn = true;
     
-
     // event handlers and logic for players clicking on the gameboard
     // will not let a player add their move to a tile if the tile is occupied
     // appends the move to the "moves" array as well
@@ -100,6 +98,7 @@ const displayController = (() => {
                     moves[i] = playerObj1.getSymbol();
                     if (e.currentTarget.innerText == '') {
                         e.currentTarget.innerText = playerObj1.getSymbol();
+                        gameLogic.detectWinner(moves, playerObj1.getSymbol());
                         player1_turn = false;    
                     }
                 } else if (!player1_turn) {
@@ -107,10 +106,10 @@ const displayController = (() => {
                     moves[i] = playerObj2.getSymbol();
                     if (e.currentTarget.innerText == '') {
                         e.currentTarget.innerText = playerObj2.getSymbol();
-                        player1_turn = true;    
+                        gameLogic.detectWinner(moves, playerObj2.getSymbol());
+                        player1_turn = true;
                     }
                 }
-
             });
         });
     };
@@ -118,9 +117,77 @@ const displayController = (() => {
     return { playerSetup, playerMoves }
 })();
 
+const gameLogic = (() => {
+
+    // checks for a winner of the game each time a move is made
+    // @param arr The array of moves so far
+    // @param char The symbol of the player who just made a move
+    const detectWinner = (arr, char) => {
+
+        let nodelist = document.querySelectorAll('.board_square');
+
+        // check rows for win
+        // i+=3 so it doesn't erroneously look at sequential (array)
+        // indices that appear in different 'rows' of the gameboard as a win
+        for (i = 0; i < arr.length; i+=3) {
+            if (arr[i] == '')
+                continue;
+            if (arr[i] == arr[i+1] && arr[i] == arr[i+2]){
+                alert(
+                    `Row victory for Player ${char} at ${nodelist[i].getAttribute('data-index')},
+                    ${nodelist[i+1].getAttribute('data-index')},
+                    ${nodelist[i+2].getAttribute('data-index')}`
+                );
+                break;
+            }
+        }
+
+        // check columns for win
+        // no index iteration oddities like with the rows, for some reason
+        for (i = 0; i < arr.length; i++) {
+            if (arr[i] == '')
+                continue;
+            if (arr[i] == arr[i+3] && arr[i] == arr[i+6]) {
+                alert(
+                    `Column victory for Player ${char} at ${nodelist[i].getAttribute('data-index')},
+                    ${nodelist[i+3].getAttribute('data-index')},
+                    ${nodelist[i+6].getAttribute('data-index')}`
+                );
+                break;
+            }
+        }
+
+        // check for diagonal wins
+        for (i = 0; i < arr.length; i++) {
+            if (arr[i] == '')
+                continue;
+            if (arr[i] == arr[i+4] && arr[i] == arr[i+8]) {
+                alert(
+                    `Diagonal victory for Player ${char} at ${nodelist[i].getAttribute('data-index')},
+                    ${nodelist[i+4].getAttribute('data-index')},
+                    ${nodelist[i+8].getAttribute('data-index')}`
+                );
+                break;
+            } else if (arr[i] == arr[i+2] && arr[i] == arr[i+4]) {
+                alert(
+                    `Diagonal victory for Player ${char} at ${nodelist[i].getAttribute('data-index')},
+                    ${nodelist[i+2].getAttribute('data-index')},
+                    ${nodelist[i+4].getAttribute('data-index')}`
+                );
+                break;
+
+            }
+        }
+    };
+
+    return { detectWinner };
+
+})();
+
 const Player = () => {
     let symbol = '';
     let name = '';
+    let wins = '';
 
     const getName = () => name;
     const setName = (str) => name = str;
@@ -128,7 +195,15 @@ const Player = () => {
     const setSymbol = (str) => symbol = str;
     const getSymbol = () => symbol;
 
-    return {getName, setName, getSymbol, setSymbol};
+    const setWins = (num) => wins = num;
+    const getWins = () => wins;
+
+
+    return {
+        getName, setName, 
+        getSymbol, setSymbol,
+        getWins, setWins,
+    };
 };
 
 

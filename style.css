@@ -43,7 +43,7 @@ button:hover {
     border: 5px groove black;
 }
 
-#game_setup {
+#game_setup_panel {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -52,10 +52,10 @@ button:hover {
     background-color: darkslategray;
 }
 
-#player_name_select {
+#player_name_select_panel {
 
 }
 
-#player_move_select {
+#player_move_select_panel {
 
 }
