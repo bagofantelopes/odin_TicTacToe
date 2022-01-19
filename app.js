@@ -69,13 +69,13 @@ const displayController = (() => {
         });
 
         document.getElementById('name_submit').addEventListener('click', e => {
-            player1Name = document.getElementById('player_1_name');
-            playerObj1.setName(player1Name.innerText);
+            player1Name = document.getElementById('player_1_name').value;
+            playerObj1.setName(player1Name);
     
-            console.log(playerObj1.getName());
+            console.log(player1Name);
     
-            player2Name = document.getElementById('player_2_name');
-            playerObj2.setName = player2Name.innerText;    
+            player2Name = document.getElementById('player_2_name').value;
+            playerObj2.setName(player2Name);    
         });
 
     };
@@ -98,7 +98,7 @@ const displayController = (() => {
                     moves[i] = playerObj1.getSymbol();
                     if (e.currentTarget.innerText == '') {
                         e.currentTarget.innerText = playerObj1.getSymbol();
-                        gameLogic.detectWinner(moves, playerObj1.getSymbol());
+                        gameLogic.detectWinner(moves, playerObj1);
                         player1_turn = false;    
                     }
                 } else if (!player1_turn) {
@@ -106,7 +106,7 @@ const displayController = (() => {
                     moves[i] = playerObj2.getSymbol();
                     if (e.currentTarget.innerText == '') {
                         e.currentTarget.innerText = playerObj2.getSymbol();
-                        gameLogic.detectWinner(moves, playerObj2.getSymbol());
+                        gameLogic.detectWinner(moves, playerObj2);
                         player1_turn = true;
                     }
                 }
@@ -117,15 +117,20 @@ const displayController = (() => {
     return { playerSetup, playerMoves }
 })();
 
+
+// module to run the game 'logic'
+// just checks for win conditions, basically
 const gameLogic = (() => {
 
     // checks for a winner of the game each time a move is made
     // @param arr The array of moves so far
-    // @param char The symbol of the player who just made a move
-    const detectWinner = (arr, char) => {
+    // @param player The player who just made a move
+    const detectWinner = (arr, player) => {
+        let name = player.getName();
+        let sym = player.getSymbol();
+        let wins = player.getWins();
 
         let nodelist = document.querySelectorAll('.board_square');
-
         // check rows for win
         // i+=3 so it doesn't erroneously look at sequential (array)
         // indices that appear in different 'rows' of the gameboard as a win
@@ -133,13 +138,12 @@ const gameLogic = (() => {
             if (arr[i] == '')
                 continue;
             if (arr[i] == arr[i+1] && arr[i] == arr[i+2]){
+                player.setWins(1);
                 alert(
-                    `Row victory for Player ${char} at ${nodelist[i].getAttribute('data-index')},
-                    ${nodelist[i+1].getAttribute('data-index')},
-                    ${nodelist[i+2].getAttribute('data-index')}`
+                    `Victory for ${name} with ${sym}! 
+                    They've won ${wins}`
                 );
-                break;
-            }
+                break;            }
         }
 
         // check columns for win
@@ -148,13 +152,12 @@ const gameLogic = (() => {
             if (arr[i] == '')
                 continue;
             if (arr[i] == arr[i+3] && arr[i] == arr[i+6]) {
+                player.setWins(1);
                 alert(
-                    `Column victory for Player ${char} at ${nodelist[i].getAttribute('data-index')},
-                    ${nodelist[i+3].getAttribute('data-index')},
-                    ${nodelist[i+6].getAttribute('data-index')}`
+                    `Victory for ${name} with ${sym}! 
+                    They've won ${wins}`
                 );
-                break;
-            }
+                break;            }
         }
 
         // check for diagonal wins
@@ -162,20 +165,18 @@ const gameLogic = (() => {
             if (arr[i] == '')
                 continue;
             if (arr[i] == arr[i+4] && arr[i] == arr[i+8]) {
+                player.setWins(1);
                 alert(
-                    `Diagonal victory for Player ${char} at ${nodelist[i].getAttribute('data-index')},
-                    ${nodelist[i+4].getAttribute('data-index')},
-                    ${nodelist[i+8].getAttribute('data-index')}`
+                    `Victory for ${name} with ${sym}! 
+                    They've won ${wins}`
+                );
+                break;            } else if (arr[i] == arr[i+2] && arr[i] == arr[i+4]) {
+                player.setWins(1);
+                alert(
+                    `Victory for ${name} with ${sym}! 
+                    They've won ${wins}`
                 );
                 break;
-            } else if (arr[i] == arr[i+2] && arr[i] == arr[i+4]) {
-                alert(
-                    `Diagonal victory for Player ${char} at ${nodelist[i].getAttribute('data-index')},
-                    ${nodelist[i+2].getAttribute('data-index')},
-                    ${nodelist[i+4].getAttribute('data-index')}`
-                );
-                break;
-
             }
         }
     };
@@ -195,7 +196,7 @@ const Player = () => {
     const setSymbol = (str) => symbol = str;
     const getSymbol = () => symbol;
 
-    const setWins = (num) => wins = num;
+    const setWins = (num) => wins += num;
     const getWins = () => wins;
 
 
