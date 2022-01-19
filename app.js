@@ -122,15 +122,14 @@ const displayController = (() => {
 // just checks for win conditions, basically
 const gameLogic = (() => {
 
+    let moves_remaining = 9;
+
     // checks for a winner of the game each time a move is made
     // @param arr The array of moves so far
     // @param player The player who just made a move
     const detectWinner = (arr, player) => {
-        let name = player.getName();
-        let sym = player.getSymbol();
-        let wins = player.getWins();
 
-        let nodelist = document.querySelectorAll('.board_square');
+
         // check rows for win
         // i+=3 so it doesn't erroneously look at sequential (array)
         // indices that appear in different 'rows' of the gameboard as a win
@@ -140,44 +139,46 @@ const gameLogic = (() => {
             if (arr[i] == arr[i+1] && arr[i] == arr[i+2]){
                 player.setWins(1);
                 alert(
-                    `Victory for ${name} with ${sym}! 
-                    They've won ${wins}`
+                    `Victory for ${player.getName()} with ${player.getSymbol()}! 
+                    They've won ${player.getWins()} game(s)`
                 );
-                break;            }
+                break;            
+            }
         }
 
         // check columns for win
         // no index iteration oddities like with the rows, for some reason
         for (i = 0; i < arr.length; i++) {
+            
             if (arr[i] == '')
                 continue;
             if (arr[i] == arr[i+3] && arr[i] == arr[i+6]) {
                 player.setWins(1);
                 alert(
-                    `Victory for ${name} with ${sym}! 
-                    They've won ${wins}`
+                    `Victory for ${player.getName()} with ${player.getSymbol()}! 
+                    They've won ${player.getWins()} game(s)`
                 );
-                break;            }
-        }
-
-        // check for diagonal wins
-        for (i = 0; i < arr.length; i++) {
-            if (arr[i] == '')
-                continue;
-            if (arr[i] == arr[i+4] && arr[i] == arr[i+8]) {
+                break;            
+            } else if (i == 0 && arr[0] == arr[i+4] && arr[i+4] == arr[i+8]) {
                 player.setWins(1);
                 alert(
-                    `Victory for ${name} with ${sym}! 
-                    They've won ${wins}`
+                    `Victory for ${player.getName()} with ${player.getSymbol()}! 
+                    They've won ${player.getWins()} game(s)`
                 );
-                break;            } else if (arr[i] == arr[i+2] && arr[i] == arr[i+4]) {
+                break;
+            } else if (i == 2 && arr[2] == arr[4] && arr[4] == arr[6]) {
                 player.setWins(1);
                 alert(
-                    `Victory for ${name} with ${sym}! 
-                    They've won ${wins}`
+                    `Victory for ${player.getName()} with ${player.getSymbol()}! 
+                    They've won ${player.getWins()} game(s)`
                 );
                 break;
             }
+        }
+        moves_remaining--;
+        console.log(moves_remaining);
+        if (moves_remaining <= 0) {
+            alert('TIE GAME');
         }
     };
 
@@ -188,7 +189,7 @@ const gameLogic = (() => {
 const Player = () => {
     let symbol = '';
     let name = '';
-    let wins = '';
+    let wins = 0;
 
     const getName = () => name;
     const setName = (str) => name = str;
