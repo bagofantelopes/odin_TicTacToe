@@ -10,34 +10,41 @@
 </head>
 <body>
     <div id="game_setup_panel">
+        <div class="player_panel">
+            <div class="player_names_div">
+                <label id="player_1_label" for="player_1_name">Enter Player1 name here: </label>
+                <input onfocus=this.value='' type="text" name="player_1_name" id="player_1_name">
 
-        <div id="player_name_select_panel">
-            <label for="player_1_name">Enter Player1 name here: </label>
-            <input type="text" name="player_1_name" id="player_1_name">
-        
-            <label for="player_2_name">Enter Player2 name here: </label>
-            <input type="text" name="player_2_name" id="player_2_name">    
+                <div class="player_info" id="player_1_panel">
+                </div>    
+            </div>
         </div>
 
-        <button id="name_submit">SUBMIT PLAYERS</button>
-
-        <div class="test_div">
-            <button id="test_button">Click me to see contents of the gameBoard.board array</button>
-        </div>
-    
-
-        <div id="player_move_select_panel">
-            <button id="x_button">Click here for 'X'</button>
-            <button id="o_button">Click here for 'O'</button>
+        <div class="controls_div">
+            <button id="game_start">CLICK HERE TO BEGIN</button>
+            <button id="reset_button">Reset Board / New Game</button>
         </div>
 
+        <div class="player_panel">
+            <div class="player_names_div">
+                <label id="player_2_label" for="player_2_name">Enter Player2 name here: </label>
+                <input onfocus=this.value='' type="text" name="player_2_name" id="player_2_name">
+                
+                <div class="player_info" id="player_2_panel">
+                </div>    
+            </div>
+        </div>
     </div>
-
     
     <div id="main">
-        
+        <div id="win_panel">
+        </div>
     </div>
-
-    
 </body>
+
+<footer>
+    <div>
+        <p>Copyright@ 2022 Travis F</p>
+    </div>
+</footer>
 </html>
