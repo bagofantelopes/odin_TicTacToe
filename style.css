@@ -47,6 +47,10 @@ footer {
     min-width: 35px;
 }
 
+.board_square:hover {
+    background-color: royalblue;
+}
+
 .player_panel {
     display: flex;
     flex-direction: column;
